@@ -3,6 +3,7 @@ package com.mechanitis.mongodb.gettingstarted;
 import com.mechanitis.mongodb.gettingstarted.person.Address;
 import com.mechanitis.mongodb.gettingstarted.person.Person;
 import com.mechanitis.mongodb.gettingstarted.person.PersonAdaptor;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -38,8 +39,7 @@ public class Exercise4RetrieveTest {
         collection.insert(PersonAdaptor.toDBObject(bob));
 
         // When
-        // TODO: get this from querying the collection.  Hint: you can find just one
-        DBObject result = null;
+        DBObject result = collection.find().one();
 
         // Then
         assertThat((String) result.get("_id"), is("bob"));
@@ -55,8 +55,7 @@ public class Exercise4RetrieveTest {
         collection.insert(PersonAdaptor.toDBObject(bob));
 
         // When
-        // TODO: get a cursor with everything in the database
-        DBCursor cursor = null;
+        DBCursor cursor = collection.find();
 
         // Then
         assertThat(cursor.size(), is(2));
@@ -75,8 +74,7 @@ public class Exercise4RetrieveTest {
         collection.insert(PersonAdaptor.toDBObject(bob));
 
         // When
-        // TODO create the query document
-        DBObject query = null;
+        DBObject query = new BasicDBObject("_id", "bob");
         DBCursor cursor = collection.find(query);
 
         // Then
