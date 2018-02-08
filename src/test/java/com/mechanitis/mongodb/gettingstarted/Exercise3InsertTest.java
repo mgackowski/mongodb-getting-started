@@ -49,12 +49,13 @@ public class Exercise3InsertTest {
         Person charlie = new Person("charlie", "Charles", new Address("74 That Place", "LondonTown", 1234567890), asList(1, 74));
 
         // When
-        // TODO: insert Charlie into the collection
+        collection.insert(PersonAdaptor.toDBObject(charlie));
 
         // Then
         assertThat(collection.find().count(), is(1));
 
         // Clean up
         database.dropDatabase();
+        mongoClient.close();
     }
 }
