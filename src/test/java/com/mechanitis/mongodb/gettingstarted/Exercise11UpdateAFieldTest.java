@@ -1,25 +1,28 @@
 package com.mechanitis.mongodb.gettingstarted;
 
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import java.net.UnknownHostException;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mechanitis.mongodb.gettingstarted.person.Address;
 import com.mechanitis.mongodb.gettingstarted.person.Person;
 import com.mechanitis.mongodb.gettingstarted.person.PersonAdaptor;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.WriteResult;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
-import java.net.UnknownHostException;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
+@SuppressWarnings("unchecked")
 public class Exercise11UpdateAFieldTest {
     private DB database;
     private DBCollection collection;
@@ -36,10 +39,10 @@ public class Exercise11UpdateAFieldTest {
         String charliesNewAddress = "987 The New Street";
 
         // When
-        // TODO create query to find Charlie by ID
-        DBObject findCharlie = null;
-        // TODO use the query to find charlie and update his street with the new address
-        WriteResult resultOfUpdate = null;
+        DBObject findCharlie = new BasicDBObject("_id", "charlie");
+        WriteResult resultOfUpdate = collection.update(findCharlie,
+        		new BasicDBObject("$set",
+        				new BasicDBObject("address.street", charliesNewAddress)));
 
         // Then
         assertThat(resultOfUpdate.getN(), is(1));
@@ -66,10 +69,10 @@ public class Exercise11UpdateAFieldTest {
         collection.insert(PersonAdaptor.toDBObject(charlie));
 
         // When
-        // TODO create query to find Charlie by ID
-        DBObject findCharlie = null;
-        // TODO use the query to find charlie and update his street with the new address
-        WriteResult resultOfUpdate = null;
+        DBObject findCharlie = new BasicDBObject("_id", "charlie");
+        WriteResult resultOfUpdate = collection.update(findCharlie,
+        		new BasicDBObject("$set",
+        				new BasicDBObject("newField", "A New Value")));
 
         // Then
         assertThat(resultOfUpdate.getN(), is(1));
@@ -92,9 +95,10 @@ public class Exercise11UpdateAFieldTest {
         collection.insert(PersonAdaptor.toDBObject(charlie));
 
         // When
-        // TODO create query to find Bob by ID
-        DBObject findBob = null;
-        // TODO update the only Bob document to add the ID '66' to the array of Book IDs
+        DBObject findBob = new BasicDBObject("_id", "bob");
+        collection.update(findBob,
+        		new BasicDBObject("$push",
+        				new BasicDBObject("books", 66)));
 
         // Then
         DBObject newBob = collection.find(findBob).toArray().get(0);
