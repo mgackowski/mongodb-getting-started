@@ -1,24 +1,26 @@
 package com.mechanitis.mongodb.gettingstarted;
 
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import java.net.UnknownHostException;
+import java.util.Collections;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mechanitis.mongodb.gettingstarted.person.Address;
 import com.mechanitis.mongodb.gettingstarted.person.Person;
 import com.mechanitis.mongodb.gettingstarted.person.PersonAdaptor;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.WriteResult;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.net.UnknownHostException;
-import java.util.Collections;
-
-import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 public class Exercise13UpsertTest {
     private DB database;
@@ -38,10 +40,8 @@ public class Exercise13UpsertTest {
         Person claire = new Person("claire", "Claire", new Address("1", "Town", 836558493), Collections.<Integer>emptyList());
 
         // When
-        // TODO create query to find Claire by ID
-        DBObject findClaire = null;
-        // TODO Perform an update with this new person to show it does NOT get added to the database
-        WriteResult resultOfUpdate = null;
+        DBObject findClaire = new BasicDBObject("_id", "claire");
+        WriteResult resultOfUpdate = collection.update(findClaire, PersonAdaptor.toDBObject(claire));
 
         // Then
         assertThat(resultOfUpdate.getN(), is(0));
@@ -50,8 +50,8 @@ public class Exercise13UpsertTest {
 
 
         // When
-        // TODO Perform an update with this new person to show it DOES get added to the database
-        WriteResult resultOfUpsert = null;
+        WriteResult resultOfUpsert = collection.update(findClaire, PersonAdaptor.toDBObject(claire),
+        		true, false);
 
         // Then
         assertThat(resultOfUpsert.getN(), is(1));
