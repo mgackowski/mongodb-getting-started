@@ -20,7 +20,6 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-@SuppressWarnings("unchecked")
 public class Exercise4RetrieveTest {
     private DB database;
     private DBCollection collection;

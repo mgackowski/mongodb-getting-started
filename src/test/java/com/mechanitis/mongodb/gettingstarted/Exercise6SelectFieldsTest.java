@@ -3,6 +3,7 @@ package com.mechanitis.mongodb.gettingstarted;
 import com.mechanitis.mongodb.gettingstarted.person.Address;
 import com.mechanitis.mongodb.gettingstarted.person.Person;
 import com.mechanitis.mongodb.gettingstarted.person.PersonAdaptor;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -21,6 +22,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+@SuppressWarnings("unchecked")
 public class Exercise6SelectFieldsTest {
     private DB database;
     private DBCollection collection;
@@ -35,10 +37,9 @@ public class Exercise6SelectFieldsTest {
         collection.insert(PersonAdaptor.toDBObject(bob));
 
         // When
-        // TODO create the correct query to find Charlie by name (see above)
-        DBObject query = null;
-        // TODO use this query, combined with the "fields" selector, to get a list of result documents with only the name and ID fields
-        DBCursor results = null;
+        DBObject query = new BasicDBObject().append("name", "Charles");
+        DBCursor results = collection.find(query,
+        		new BasicDBObject().append("name", 1));
 
         // Then
         assertThat(results.size(), is(1));
@@ -60,10 +61,9 @@ public class Exercise6SelectFieldsTest {
         collection.insert(PersonAdaptor.toDBObject(bob));
 
         // When
-        // TODO create the correct query to find Charlie by name (see above)
-        DBObject query = null;
-        // TODO use this query, combined with the "fields" selector, to get a list of result documents without address subdocument
-        DBCursor results = null;
+        DBObject query = new BasicDBObject().append("name", "Charles");
+        DBCursor results = collection.find(query,
+        		new BasicDBObject().append("address", 0));
 
         // Then
         assertThat(results.size(), is(1));
