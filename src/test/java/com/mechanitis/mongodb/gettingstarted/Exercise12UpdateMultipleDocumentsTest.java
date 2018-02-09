@@ -40,11 +40,11 @@ public class Exercise12UpdateMultipleDocumentsTest {
         collection.insert(PersonAdaptor.toDBObject(emily));
 
         // When
-        // TODO create query to find everyone with 'LondonTown' as their city
-        DBObject findLondoners = null;
+        DBObject findLondoners = new BasicDBObject("address.city", "LondonTown");
         assertThat(collection.find(findLondoners).count(), is(2));
 
-        // TODO update only the first Londonder here to have a new field, "wasUpdated", with a value of true
+        collection.update(findLondoners, new BasicDBObject("$set",
+        		new BasicDBObject("wasUpdated", true)));
 
         
         // Then
@@ -72,12 +72,11 @@ public class Exercise12UpdateMultipleDocumentsTest {
         collection.insert(PersonAdaptor.toDBObject(emily));
 
         // When
-        // TODO create query to find everyone with 'LondonTown' as their city
-        DBObject findLondoners = null;
+        DBObject findLondoners = new BasicDBObject("address.city", "LondonTown");
         assertThat(collection.find(findLondoners).count(), is(2));
 
-        // TODO update all Londonders here to have a new field, "wasUpdated", with a value of true
-
+        collection.update(findLondoners, new BasicDBObject("$set",
+        		new BasicDBObject("wasUpdated", true)), false, true);
         
         // Then
         List<DBObject> londoners = collection.find(findLondoners).sort(new BasicDBObject("_id", 1)).toArray();
